@@ -21,9 +21,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -89,7 +89,7 @@ fun SharedTransitionScope.DetailsView(
                 )
             )
 
-            Divider(color = Color.Black.copy(alpha = 0.38f))
+            HorizontalDivider(color = Color.Black.copy(alpha = 0.38f))
 
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -109,7 +109,7 @@ fun SharedTransitionScope.DetailsView(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            Divider(color = Color.Black.copy(alpha = 0.38f))
+            HorizontalDivider(color = Color.Black.copy(alpha = 0.38f))
 
             Spacer(modifier = Modifier.height(15.dp))
 
@@ -179,7 +179,7 @@ fun SharedTransitionScope.DetailsView(
             modifier = Modifier.align(Alignment.TopStart)
         ) {
             Icon(
-                Icons.Default.ArrowBack,
+                Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back"
             )
         }

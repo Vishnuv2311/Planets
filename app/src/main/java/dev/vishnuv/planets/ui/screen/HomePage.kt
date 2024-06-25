@@ -24,7 +24,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -66,6 +66,7 @@ fun SharedTransitionScope.HomePage(
     Scaffold(Modifier.background(color = gradientEndColor)) { padding ->
         Box(
             modifier = Modifier
+                .padding(padding)
                 .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
@@ -176,7 +177,7 @@ fun SharedTransitionScope.HomePage(
                                             )
                                         )
                                         Icon(
-                                            Icons.Rounded.ArrowForward,
+                                            Icons.AutoMirrored.Rounded.ArrowForward,
                                             contentDescription = null,
                                             tint = secondaryTextColor,
                                             modifier = Modifier.size(18.dp)
