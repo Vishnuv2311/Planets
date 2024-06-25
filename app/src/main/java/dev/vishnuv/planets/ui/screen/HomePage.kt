@@ -1,13 +1,15 @@
 package dev.vishnuv.planets.ui.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,9 +54,9 @@ import dev.vishnuv.planets.ui.theme.primaryTextColor
 import dev.vishnuv.planets.ui.theme.secondaryTextColor
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomePage(
+fun SharedTransitionScope.HomePage(
+    animatedVisibilityScope: AnimatedVisibilityScope,
     goToDetails: (PlanetInfo) -> Unit
 ) {
     val planets = planets
@@ -118,19 +118,20 @@ fun HomePage(
                         .height(500.dp)
                 ) { page ->
                     val planet = planets[page]
-                    Box(Modifier
-                        .padding(horizontal = 32.dp)
-                        .graphicsLayer {
-                        val pageOffset = (
-                                (pagerState.currentPage - page) + pagerState
-                                    .currentPageOffsetFraction
-                                ).absoluteValue
-                        alpha = lerp(
-                            start = 0.5f,
-                            stop = 1f,
-                            fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                        )
-                    }) {
+                    Box(
+                        Modifier
+                            .padding(horizontal = 32.dp)
+                            .graphicsLayer {
+                                val pageOffset = (
+                                        (pagerState.currentPage - page) + pagerState
+                                            .currentPageOffsetFraction
+                                        ).absoluteValue
+                                alpha = lerp(
+                                    start = 0.5f,
+                                    stop = 1f,
+                                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                                )
+                            }) {
                         Column {
                             Spacer(modifier = Modifier.height(100.dp))
                             Card(
@@ -189,7 +190,11 @@ fun HomePage(
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
                                 .size(300.dp)
-                                .clickable { goToDetails(planet) },
+                                .clickable { goToDetails(planet) }
+                                .sharedElement(
+                                    state = rememberSharedContentState(key = planet.name),
+                                    animatedVisibilityScope = animatedVisibilityScope
+                                ),
                             contentDescription = null,
                         )
                     }
@@ -224,5 +229,9 @@ fun HomePage(
 @Preview
 @Composable
 private fun HomePagePreview() {
-    HomePage {}
+    SharedTransitionLayout {
+        AnimatedVisibility(visible = true) {
+            HomePage(animatedVisibilityScope = this, goToDetails = {})
+        }
+    }
 }

@@ -1,5 +1,9 @@
 package dev.vishnuv.planets.ui.screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -44,7 +48,11 @@ import dev.vishnuv.planets.ui.theme.contentTextColor
 import dev.vishnuv.planets.ui.theme.primaryTextColor
 
 @Composable
-fun DetailsView(planetInfo: PlanetInfo, goBack: () -> Unit) {
+fun SharedTransitionScope.DetailsView(
+    planetInfo: PlanetInfo,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    goBack: () -> Unit
+) {
 
 
     val scrollState = rememberScrollState()
@@ -148,6 +156,10 @@ fun DetailsView(planetInfo: PlanetInfo, goBack: () -> Unit) {
                 .size(200.dp)
                 .align(Alignment.TopEnd)
                 .offset((-70).dp, 0.dp)
+                .sharedElement(
+                    state = rememberSharedContentState(key = planetInfo.name),
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
         )
 
         Text(
@@ -177,5 +189,13 @@ fun DetailsView(planetInfo: PlanetInfo, goBack: () -> Unit) {
 @Preview
 @Composable
 private fun DetailsViewPreview() {
-    DetailsView(planetInfo = planets.first()) {}
+    SharedTransitionLayout {
+        AnimatedVisibility(visible = true) {
+            DetailsView(
+                planetInfo = planets.first(),
+                animatedVisibilityScope = this,
+            ) {}
+        }
+    }
+
 }
